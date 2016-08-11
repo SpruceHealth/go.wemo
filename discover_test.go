@@ -15,10 +15,11 @@ package wemo
 
 import (
 	"fmt"
-	. "github.com/smartystreets/goconvey/convey"
 	"os"
 	"testing"
 	"time"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestDisoverAll(t *testing.T) {

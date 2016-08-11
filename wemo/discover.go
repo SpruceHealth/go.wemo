@@ -1,13 +1,14 @@
 package main
 
 import (
-	"code.google.com/p/go.net/context"
+	"context"
 	"fmt"
-	"github.com/codegangsta/cli"
-	"github.com/savaki/go.wemo"
 	"log"
 	"sort"
 	"time"
+
+	"github.com/codegangsta/cli"
+	"github.com/savaki/go.wemo"
 )
 
 var discoverCommand = cli.Command{

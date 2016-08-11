@@ -14,11 +14,10 @@
 package wemo
 
 import (
-	"code.google.com/p/go.net/context"
+	"context"
 	"encoding/xml"
 	"errors"
 	"fmt"
-	"github.com/savaki/httpctx"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -65,10 +64,23 @@ func unmarshalDeviceInfo(data []byte) (*DeviceInfo, error) {
 }
 
 func (d *Device) FetchDeviceInfo(ctx context.Context) (*DeviceInfo, error) {
-	var data []byte
-
 	uri := fmt.Sprintf("http://%s/setup.xml", d.Host)
-	err := httpctx.NewClient().Get(ctx, uri, nil, &data)
+	req, err := http.NewRequest("GET", uri, nil)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("Expected 200 got %d", res.StatusCode)
+	}
+
+	data, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
